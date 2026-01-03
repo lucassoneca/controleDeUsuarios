@@ -8,10 +8,23 @@ public class UsuariosService implements UsuarioServiceInterface {
     //cadastrar usuario
     @Override
     public void cadastrarUsuario(String nome, String email) {
-        System.out.println("Digite o nome do usuário que deseja cadastrar: ");
-        nome = cadastrar.nextLine();
-        System.out.println("Digete o email do usuário: ");
-        email = cadastrar.nextLine();
+        do {
+            System.out.print("Digite o nome do usuário que deseja cadastrar: ");
+            nome = cadastrar.nextLine().trim();
+
+            if (nome.isEmpty()) {
+                System.out.println("Erro: o nome não pode ficar vazio.");
+            }
+        } while (nome.isEmpty());
+
+        do {
+            System.out.print("Digite o email do usuário: ");
+            email = cadastrar.nextLine().trim();
+
+            if (email.isEmpty()) {
+                System.out.println("Erro: o email não pode ficar vazio.");
+            }
+        } while (email.isEmpty());
 
         Usuarios novoUsuario = new Usuarios(nome, email);
         usuarios.add(novoUsuario);
@@ -38,6 +51,9 @@ public class UsuariosService implements UsuarioServiceInterface {
         System.out.println("Digite o id do usuário que você deseja buscar: ");
         int idbuscar = cadastrar.nextInt();
         cadastrar.nextLine();
+        if (idbuscar <= 0) {
+            System.out.println("Isso não é um número inteiro");
+        }
         if (usuarios.isEmpty()) {
             System.out.println("Esse ID não existe na lista");
         } else {
@@ -51,7 +67,20 @@ public class UsuariosService implements UsuarioServiceInterface {
         System.out.println("Digite o id do usuário que você deseja atualizar os dados: ");
         int buscarID = cadastrar.nextInt();
         cadastrar.nextLine();
-        System.out.println(usuarios.get(buscarID));
+
+        Usuarios usuarioEncontrado = null;
+
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == buscarID) {
+                usuarioEncontrado = usuarios.get(i);
+                break;
+            }
+        }
+
+        if (usuarioEncontrado == null) {
+            System.out.println("Usuário não encontrado.");
+            return;
+        }
 
         System.out.println("Deseja atualizar os dados de: " + usuarios.get(buscarID) + "?");
         System.out.println("digite 1 para Sim");
@@ -65,14 +94,15 @@ public class UsuariosService implements UsuarioServiceInterface {
             String email = cadastrar.nextLine();
 
             System.out.println("Novo nome e email cadastrados: ");
-            System.out.println("Nome: " + nome);
-            System.out.println("Email: " + email);
-            Usuarios atualizado = new Usuarios(nome, email);
-            usuarios.set(buscarID, atualizado);
+            usuarioEncontrado.setNome(nome);
+            usuarioEncontrado.setEmail(email);
+
+            System.out.println("Usuário atualizado com sucesso!");
+            System.out.println(usuarios.set(buscarID, usuarioEncontrado));
         } else {
-            System.out.println("Opção cancelada.");
+            System.out.println("Operação cancelada.");
         }
-   }
+    }
 
     //remover usuario
     @Override
@@ -81,12 +111,25 @@ public class UsuariosService implements UsuarioServiceInterface {
         int removerUsuario = cadastrar.nextInt();
         cadastrar.nextLine();
         id = removerUsuario;
-        if (usuarios.isEmpty() == false ) {
-            System.out.println("Usuário " + usuarios.get(id) + " removido com sucesso!");
-            usuarios.remove(id);
-        } else {
-            System.out.println("Esse ID não existe na lista");
+
+        //verifica se o usuário existe
+        Usuarios usuarioEncontrado = null;
+
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).getId() == id) {
+                usuarioEncontrado = usuarios.get(i);
+                usuarios.remove(i);
+                System.out.println("Usuário removido com sucesso!");
+                break;
+            }
         }
+
+        //se não existir = não encontrado
+        if (usuarioEncontrado == null) {
+            System.out.println("Usuário não encontrado.");
+            return;
+        }
+
     }
 
     @Override

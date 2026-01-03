@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner digitacao = new Scanner(System.in);
         int opcao = 0;
@@ -8,7 +9,7 @@ public class Main {
         UsuariosService usuariosService = new UsuariosService();
 
         while (opcao != 6) {
-            System.out.println("---------- BANCO 1DE USUÁRIOS ----------");
+            System.out.println("---------- BANCO DE USUÁRIOS ----------");
             System.out.println("Digite 1 para cadastrar um novo usuário");
             System.out.println("Digite 2 para atualizar um usuário existente");
             System.out.println("Digite 3 para listar todos os usuários existentes");
@@ -38,6 +39,8 @@ public class Main {
                 case 6:
                     System.out.println("Finalizando o programa...");
                     break;
+                default:
+                    System.out.println("Opção inválida");
             }
         }
 
